@@ -29,9 +29,10 @@ class MLP:
 			layer.backprop(d_loss, learning_rate, y)
 
 
-	def train(self, x, y, learning_rate=0.01, n_epochs=10):
+	def train(self, x, y, learning_rate=0.01, n_epochs=100):
 		for i in range(n_epochs):
-			print(f"Epoch: {i}")
+			if (i % 10 == 0):
+				print(f"Epoch: {i}")
 			if(x.ndim == 2):
 				for index, row in enumerate(x):
 					# Make prediction

@@ -40,8 +40,12 @@ neuralNetwork.add_layer(1, Functions.LinearActivationFunction()) #Output layer
 neuralNetwork.train(normalizedX[0], normalizedY[0])
 
 # Predict
-predicted = neuralNetwork.predict(normalizedX[0], normalizedY[0]) #Få tillbaka en lista av Y?
+predicted = neuralNetwork.predict(normalizedX[0], normalizedY[0])
 predicted = np.array(predicted)
+
+# Renormalize results
 predictedRenomalized = normalizer.renormalize(predicted)
+
+# Print results and targets
 print(f"Predicted: {predictedRenomalized}")
 print(f"Target: {matrix_Y[0]}")
