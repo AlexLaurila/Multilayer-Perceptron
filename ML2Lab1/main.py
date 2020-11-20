@@ -2,50 +2,55 @@ import numpy as np
 import pandas as pd
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
+from matplotlib import pyplot as plt
+from itertools import chain
 
 from MLP import MLP
 from Layer import Layer
 from Normalizer import Normalizer
+from DatasetHandler import DatasetHandler
+from Plotter import Plotter
 import Functions
 
-# Dataset to use
-Dataset = "laser" 
+"""
+Available Datasets: boston, concrete, friedm, istanbul, laser, plastic, quakes, stock, wizmir
+"""
 
-# Import dataset
-dataset = pd.read_csv(f"Data/{Dataset}.csv")
+# Selected dataset
+dataset = "boston"
 
-# Split dataset for training and testing
-X_train, X_test, y_train, y_test = train_test_split(dataset.iloc[ :,: -1], dataset.iloc[ :, -1:], random_state=0, train_size=0.01)
+# Get Normalized Test & Train Data
+datasetHandler = DatasetHandler(dataset)
+normalizedX_train, normalizedY_train, normalizedX_test, normalizedY_test = datasetHandler.getNormalizedData()
 
-# Turn training data into np.arrays
-matrix_X = np.array(X_train)
-matrix_Y = np.array(y_train)
-
-# Normalize the data
-normalizer = Normalizer()
-normalizer.fit(matrix_X, matrix_Y)
-normalizedX, normalizedY = normalizer.normalize(matrix_X, matrix_Y)
-
-# Prepare a new Neural Network
+# Create Neural Network
 neuralNetwork = MLP(Functions.SquaredErrorLossFunction())
 
 # Add layers to the Neural Network
-neuralNetwork.add_layer(X_train.shape[1], Functions.InputActivationFunction()) #Input
-neuralNetwork.add_layer(16, Functions.SigmoidActivationFunction()) #Hidden layer
-neuralNetwork.add_layer(16, Functions.SigmoidActivationFunction()) #Hidden layer
-neuralNetwork.add_layer(16, Functions.SigmoidActivationFunction()) #Hidden layer
-neuralNetwork.add_layer(1, Functions.LinearActivationFunction()) #Output layer
+neuralNetwork.add_layer(datasetHandler.X_train.shape[1], Functions.InputActivationFunction()) # Input layer
+neuralNetwork.add_layer(6, Functions.SigmoidActivationFunction()) # Hidden layer
+neuralNetwork.add_layer(8, Functions.SigmoidActivationFunction()) # Hidden layer
+neuralNetwork.add_layer(4, Functions.SigmoidActivationFunction()) # Hidden layer
+neuralNetwork.add_layer(1, Functions.LinearActivationFunction()) # Output layer
 
 # Train the Neural Network
-neuralNetwork.train(normalizedX[0], normalizedY[0])
+neuralNetwork.train(normalizedX_train, normalizedY_train, 0.1, 100, True, -0.1)
 
-# Predict
-predicted = neuralNetwork.predict(normalizedX[0], normalizedY[0])
-predicted = np.array(predicted)
+# Predict with testing data in the Neural Network
+predicted = neuralNetwork.predict(normalizedX_test, normalizedY_test)
 
 # Renormalize results
-predictedRenomalized = normalizer.renormalize(predicted)
+predicted = np.array(predicted)
+predictedRenomalized = datasetHandler.normalizer_test.renormalize(predicted)
 
-# Print results and targets
-print(f"Predicted: {predictedRenomalized}")
-print(f"Target: {matrix_Y[0]}")
+# Fetch TargetData
+target = datasetHandler.getTargetData()
+
+# Plot training data
+max = max(chain(predictedRenomalized, target))
+# Set plot axis limits
+plt.xlim(0, max+1)
+plt.ylim(0, max+1)
+# Plot
+plt.scatter(predictedRenomalized, target)
+plt.show()

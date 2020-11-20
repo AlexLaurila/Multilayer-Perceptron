@@ -21,6 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DatasetHandler.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Functions.py">
       <SubType>Code</SubType>
     </Compile>
@@ -30,10 +33,16 @@
     <Compile Include="MLP.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Node.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Normalizer.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="main.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plotter.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
