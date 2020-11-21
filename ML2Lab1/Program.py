@@ -13,7 +13,7 @@ class Program:
 	def RunParallel(self, dataset, i):
 		# Input Parameters
 		#dataset = "boston"
-		n_epochs = 50
+		n_epochs = 500
 		train_size = 0.75
 		learning_rate = 0.1
 		decay = -0.2

@@ -58,7 +58,7 @@ class MLP:
 			if (i % 10 == 0):
 				print(f"{dataset} epoch: {i}")
 			if(x.ndim == 2):
-				x, y = shuffle(x, y, random_state=5)
+				x, y = shuffle(x, y)
 				for i, row in enumerate(x):
 					# Make prediction
 					pred = self.predict(row, y[i])
