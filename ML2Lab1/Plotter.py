@@ -17,8 +17,7 @@ class Plotter:
 			medelLoss = "Medel-loss: %.4f   \n" % InfoList[i].loss
 			trainTime = "TrainTime: %.2f sekunder    \n" % InfoList[i].trainTime
 			testTime = "TestTime: %.3f sekunder    \n" % InfoList[i].testTime
-			#textString = medelLoss + trainTime + testTime
-			textString = trainTime + testTime
+			textString = medelLoss + trainTime + testTime
 		
 			# Plot settings
 			plt.ylabel(textString, fontsize=10, rotation=0, ha='right', weight='bold')

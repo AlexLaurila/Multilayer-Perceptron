@@ -84,8 +84,7 @@ def execute(dataset):
 	program = Program()
 
 	a_pool = multiprocessing.Pool(processes = len(Index))
-	print("This App uses multiprocessing, computer might freeze for a while :)")
-	InfoList = a_pool.starmap(program.RunParallel, zip(DatasetList, Index))
+	InfoList = a_pool.starmap(program.Run, zip(DatasetList, Index))
 
 	# Plot results in InfoList. (Containing results from one dataset)
 	Plotter.Plot(InfoList)
@@ -100,7 +99,7 @@ def executeAllParallel():
 
 	a_pool = multiprocessing.Pool(processes = len(Index))
 	print("This App uses multiprocessing, computer might freeze for a while :)")
-	InfoList = a_pool.starmap(program.RunParallel, zip(DatasetList, Index))
+	InfoList = a_pool.starmap(program.Run, zip(DatasetList, Index))
 
 	# Plot results in InfoList. (Containing results from all dataset)
 	Plotter.Plot(InfoList)

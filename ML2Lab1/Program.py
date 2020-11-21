@@ -7,13 +7,9 @@ from Info import Info
 import Functions
 
 class Program:
-	def Run():
-		pass
-
-	def RunParallel(self, dataset, i):
+	def Run(self, dataset, i):
 		# Input Parameters
-		#dataset = "boston"
-		n_epochs = 500
+		n_epochs = 100
 		train_size = 0.75
 		learning_rate = 0.1
 		decay = -0.2
@@ -58,6 +54,6 @@ class Program:
 		n_layers = neuralNetwork.get_layers();
 
 		# Information
-		InfoList = Info(predictedRenomalized, target, Dataset, loss, trainTime, testTime, n_epochs, n_layers, learning_rate, decay)
+		InfoList = Info(predictedRenomalized, target, loss, dataset, trainTime, testTime, n_epochs, n_layers, learning_rate, decay)
 		
 		return InfoList
