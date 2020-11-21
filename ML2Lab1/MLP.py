@@ -4,7 +4,6 @@ import random
 from sklearn.utils import shuffle
 
 from Layer import Layer
-from Normalizer import Normalizer
 import Functions
 
 # MLP Class
@@ -13,7 +12,6 @@ class MLP:
 		self.layers = []
 		self.loss_function = loss_function
 		self.lossList = []
-		self.normalizer = Normalizer()
 	
 
 	def get_loss(self):
@@ -24,22 +22,16 @@ class MLP:
 		return len(self.layers)
 
 
-	def add_layer(self, n_nodes, activation_function):
+	def add_layer(self, layerSize, activation_function):
 		# Hidden & Output layer
 		if (len(self.layers) >= 1):
-			# The number of inputs for every node in the new layer = the number of nodes in previous layer
 			n_inputs = self.layers[-1].n_nodes
 		# Only Input layer
 		else:
-			# Input layer incoming connections
 			n_inputs = 0
 
 		# Create the new layer
-		newLayer = Layer(n_nodes, n_inputs, activation_function)
-		# Iterate over previous layer nodes to add correct amount of weights
-		if (len(self.layers) >= 1):
-			for node in self.layers[-1].nodes:
-				node.weights = np.random.randn(n_nodes)
+		newLayer = Layer(layerSize, n_inputs, activation_function)
 
 		# Add the new layer to the list
 		self.layers.append(newLayer)
@@ -48,9 +40,13 @@ class MLP:
 	def _backprop(self, x, y, d_loss, learning_rate):
 		# Loop backwards along the layers
 		for i, layer in reversed(list(enumerate(self.layers))):
+			# When in input layer
 			if (i == 0):
 				return
-			d_loss = layer.backprop(d_loss, learning_rate, y, self.layers[i-1])
+			# Output & Hidden layers
+			else:
+				input = self.layers[i-1].output
+				d_loss = layer.backprop(d_loss, learning_rate, y, input)
 
 
 	def train(self, dataset, x, y, learning_rate=0.1, n_epochs=100, decay=0):
@@ -85,28 +81,28 @@ class MLP:
 	def predict(self, x, y):
 		predictions = []
 
-		# Multiple inputs
+		# Multiple inputs iterated
 		if(x.ndim == 2):
 			for indexY, row in enumerate(x):
 				for i, layer in enumerate(self.layers):
 					if (i == 0):
 						layer.forward(row)
 					else:
-						layer.forward(self.layers[i-1].nodes)
+						layer.forward(self.layers[i-1].output)
 				# Store prediction
-				predictions.append(self.layers[-1].nodes[-1].output)
+				predictions.append(self.layers[-1].output[0])
 				# Store loss
-				#self.lossList.append(self.loss_function.forward(self.layers[-1].output[0], y[indexY]))
-		# One input
+				self.lossList.append(self.loss_function.forward(self.layers[-1].output[0], y[indexY]))
+		# One input only
 		else:
 			for i, layer in enumerate(self.layers):
 				if (i == 0):
 					layer.forward(x)
 				else:
-					layer.forward(self.layers[i-1].nodes)
+					layer.forward(self.layers[i-1].output)
 			# Store prediction
-			predictions.append(self.layers[-1].nodes[-1].output)
+			predictions.append(self.layers[-1].output[0])
 			# Store loss
-			#self.lossList.append(self.loss_function.forward(self.layers[-1].output[0], y))
+			self.lossList.append(self.loss_function.forward(self.layers[-1].output[0], y))
 
 		return predictions 

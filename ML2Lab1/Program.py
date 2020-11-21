@@ -54,10 +54,10 @@ class Program:
 		target = datasetHandler.getTargetData()
 
 		# Calculated loss
-		#Loss = neuralNetwork.get_loss();
+		loss = neuralNetwork.get_loss();
 		n_layers = neuralNetwork.get_layers();
 
 		# Information
-		InfoList = Info(predictedRenomalized, target, dataset, trainTime, testTime, n_epochs, n_layers, learning_rate, decay)
-		#InfoList = Info(predictedRenomalized, target, Dataset, Loss, trainTime, testTime, n_epochs, n_layers, learning_rate, decay)
+		InfoList = Info(predictedRenomalized, target, Dataset, loss, trainTime, testTime, n_epochs, n_layers, learning_rate, decay)
+		
 		return InfoList

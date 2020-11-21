@@ -14,7 +14,7 @@ class Plotter:
 			# Create figure and subplots
 			ax = fig.add_subplot(rows, columns, i+1)
 			plt.title(f"{InfoList[i].Dataset}", weight='bold')
-			#medelLoss = "Medel-loss: %.4f   \n" % InfoList[i].Loss
+			medelLoss = "Medel-loss: %.4f   \n" % InfoList[i].loss
 			trainTime = "TrainTime: %.2f sekunder    \n" % InfoList[i].trainTime
 			testTime = "TestTime: %.3f sekunder    \n" % InfoList[i].testTime
 			#textString = medelLoss + trainTime + testTime
