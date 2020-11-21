@@ -12,6 +12,7 @@ class DatasetHandler:
 		self.X_test = None
 		self.y_train = None
 		self.y_test = None
+		self.target = None
 		self.normalizer_train = Normalizer()
 		self.normalizer_test = Normalizer()
 
@@ -24,21 +25,24 @@ class DatasetHandler:
 
 	
 	def getTargetData(self):
-		return np.array(self.y_test)
+		return self.target
 
 
 	def normalizeData(self):
 		# Turn training data into np.arrays
-		matrix_X_train = np.array(self.X_train)
-		matrix_Y_train = np.array(self.y_train)
+		matrix_X_train = np.array(self.X_train, dtype=float)
+		matrix_Y_train = np.array(self.y_train, dtype=float)
 
 		# Normalize training data
 		self.normalizer_train.fit(matrix_X_train, matrix_Y_train)
 		normalizedX_train, normalizedY_train = self.normalizer_train.normalize(matrix_X_train, matrix_Y_train)
 
 		# Turn test data into np.arrays
-		matrix_X_test = np.array(self.X_test)
-		matrix_Y_test = np.array(self.y_test)
+		matrix_X_test = np.array(self.X_test, dtype=float)
+		matrix_Y_test = np.array(self.y_test, dtype=float)
+
+		# Set target
+		self.target = matrix_Y_test
 
 		# Normalize testing data
 		self.normalizer_test.fit(matrix_X_test, matrix_Y_test)
@@ -48,4 +52,4 @@ class DatasetHandler:
 
 
 	def splitDataset(self, dataset, train_size):
-		return train_test_split(dataset.iloc[ :,: -1], dataset.iloc[ :, -1:], random_state=0, train_size=train_size)
+		return train_test_split(dataset.iloc[ :,: -1], dataset.iloc[ :, -1:], train_size=train_size)
